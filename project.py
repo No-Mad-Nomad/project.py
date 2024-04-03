@@ -44,7 +44,7 @@ def read_pdf(content):
     text+=page.extract_text()
   return text
 
-st.title('PDF-analizotron 0.32')
+st.title('PDF-analizotron 0.33')
 with st.form('my_form'):
     #initializing persistent dictionary
     if "convo" not in st.session_state:
@@ -64,7 +64,7 @@ with st.form('my_form'):
           st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
         else:
           st.session_state.convo.send_message(startmessage+text_content)
-          st.info(st.session_state.convo.last,text)
+          st.info(st.session_state.convo.last.text)
           st.session_state.file_submitted=True
     #conversation
     msg=st.text_area("Enter question:")
