@@ -39,7 +39,7 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
 #convo = model.start_chat(history=[],prompt=startmessage+text_content)
 convo = model.start_chat(history=[])
 
-startmessage="Hello.\nBelow I will provide you a text.\nAfter that I will ask you some questions about it. Reply with\n \"Everything OK\" if you understood the text and are ready to answer my questions.\n\n"
+startmessage="Hello.\nBelow I will provide you a text.\nAfter that I will ask you some questions about it. Reply with\n \"Text accepted\" if you understood the text and are ready to answer my questions.\n\n"
 
 def read_pdf(content):
   text=""
@@ -64,7 +64,7 @@ with st.form('my_form'):
           st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
         else:
           convo.send_message(startmessage+text_content)
-          st.info("File submitted successfully")
+          st.info(convo.last,text)
           st.session_state.file_submitted=True
     #conversation
     msg=st.text_area("Enter question:")
