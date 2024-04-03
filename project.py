@@ -2,10 +2,6 @@ import google.generativeai as genai
 import PyPDF2
 import streamlit as st
 
-st.title('PDF-analizotron')
-
-text_content = ""
-
 #AI setup
 genai.configure(api_key="AIzaSyADxArDsnTX2y5ydo1FKqf3tSLzYAhXnws")
 
@@ -36,10 +32,6 @@ safety_settings = [
   },
 ]
 
-startmessage="Hello.\nBelow I will provide you a text.\nAfter that I will ask you some questions about it. Reply with\n \"Everything OK\" if you understood the text and are ready to answer my questions.\n\n"
-
-#response = model.start_chat(history=history, prompt="What's your favorite color?")
-
 model = genai.GenerativeModel(model_name="gemini-1.0-pro",
                               generation_config=generation_config,
                               safety_settings=safety_settings)
@@ -47,13 +39,32 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
 #convo = model.start_chat(history=[],prompt=startmessage+text_content)
 convo = model.start_chat(history=[])
 
-#print(convo.last.text)
-#while True:
+startmessage="Hello.\nBelow I will provide you a text.\nAfter that I will ask you some questions about it. Reply with\n \"Everything OK\" if you understood the text and are ready to answer my questions.\n\n"
+
+def read_pdf(content):
+  text=""
+  for page in PyPDF2.PdfReader(content).pages:
+    text+=page.extract_text()
+  return text
+
+file_submitted=False
+st.title('PDF-analizotron')
 with st.form('my_form'):
-   msg=st.text_area("Enter question:")
-   submitted=st.form_submit_button('Ask')
-   if submitted:
-      if msg!="STOP_CONVO":
+  if file_submitted:
+    msg=st.text_area("Enter question:")
+    submitted=st.form_submit_button('Ask')
+    if submitted:
         convo.send_message(msg)
         st.info(convo.last.text)
+  else:
+    pdffile=st.file_uploader("Upload PDF",type=["pdf"])
+    submitted=st.form_submit_button('Upload')
+    if submitted:
+      text_content=read_pdf(pdffile)
+      if len(text_content)>30000*5:
+        #token is about 4 letters or 0.75 words in English, we count it as 5 to count spaces also(roughly)
+        st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
+      else:
+        convo.send_message(startmessage+text_content)
+        file_submitted=True
 
