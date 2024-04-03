@@ -47,10 +47,9 @@ def read_pdf(content):
     text+=page.extract_text()
   return text
 
-file_submitted=False
-
 st.title('PDF-analizotron')
 with st.form('my_form'):
+    file_submitted=False
     #submission
     pdffile=st.file_uploader("Upload PDF",type=["pdf"])
     submitted1=st.form_submit_button('Upload')
