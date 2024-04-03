@@ -47,7 +47,7 @@ def read_pdf(content):
     text+=page.extract_text()
   return text
 
-st.title('PDF-analizotron 0.3')
+st.title('PDF-analizotron 0.31')
 with st.form('my_form'):
     if "file_submitted" not in st.session_state:
       st.session_state.file_submitted=False
@@ -65,7 +65,7 @@ with st.form('my_form'):
         else:
           convo.send_message(startmessage+text_content)
           st.info("File submitted successfully")
-          file_submitted=True
+          st.session_state.file_submitted=True
     #conversation
     msg=st.text_area("Enter question:")
     submitted2=st.form_submit_button('Ask')
