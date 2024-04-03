@@ -53,7 +53,7 @@ with st.form('my_form'):
    msg=st.text_area("Enter question:")
    submitted=st.form_submit_button('Ask')
    if submitted:
-      if msg=="STOP_CONVO": break
-      convo.send_message(msg)
-      st.info(convo.last.text)
+      if msg!="STOP_CONVO":
+        convo.send_message(msg)
+        st.info(convo.last.text)
 
