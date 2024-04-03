@@ -5,20 +5,7 @@ import streamlit as st
 st.title('PDF-analizotron')
 
 text_content = ""
-'''
-with open("sheckley.pdf", "rb") as pdf_file:
-    pdf_reader = PyPDF2.PdfReader(pdf_file)
 
-    # Extract text from all pages
-    for page_num in range(len(pdf_reader.pages)):
-        page = pdf_reader.pages[page_num]
-        text_content += page.extract_text()
-
-if len(text_content)>30000*5:
-    #token is about 4 letters or 0.75 words in English, we count it as 5 to count spaces also(roughly)
-    print("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
-    exit()
-'''
 #AI setup
 genai.configure(api_key="AIzaSyADxArDsnTX2y5ydo1FKqf3tSLzYAhXnws")
 
@@ -61,7 +48,7 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
 convo = model.start_chat(history=[])
 
 #print(convo.last.text)
-while True:
+#while True:
   with st.form('my_form'):
     msg=st.text_area("Enter question:")
     submitted=st.form_submit_button('Ask')
