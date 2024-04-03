@@ -48,24 +48,32 @@ def read_pdf(content):
   return text
 
 file_submitted=False
+
 st.title('PDF-analizotron')
 with st.form('my_form'):
-  if file_submitted:
-    msg=st.text_area("Enter question:")
-    submitted=st.form_submit_button('AAA')
-    if submitted:
-        convo.send_message(msg)
-        st.info(convo.last.text)
-  else:
+    #submission
     pdffile=st.file_uploader("Upload PDF",type=["pdf"])
-    submitted=st.form_submit_button('Upload')
-    if submitted:
-      text_content=read_pdf(pdffile)
-      if len(text_content)>30000*5:
-        #token is about 4 letters or 0.75 words in English, we count it as 5 to count spaces also(roughly)
-        st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
+    submitted1=st.form_submit_button('Upload')
+    if submitted1:
+      if file_submitted:
+        st.info("You already submitted the file")
       else:
-        convo.send_message(startmessage+text_content)
-        st.info("file successful")
-        file_submitted=True
+        text_content=read_pdf(pdffile)
+        if len(text_content)>30000*5:
+          #token is about 4 letters or 0.75 words in English, we count it as 5 to count spaces also(roughly)
+          st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
+        else:
+          convo.send_message(startmessage+text_content)
+          st.info("File submitted successfully")
+          file_submitted=True
+    #conversation
+    msg=st.text_area("Enter question:")
+    submitted2=st.form_submit_button('Ask')
+    if submitted2:
+        if file_submitted:
+          convo.send_message(msg)
+          st.info(convo.last.text)
+        else:
+          st.info("Submit the file first")
+        
 
