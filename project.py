@@ -49,10 +49,10 @@ convo = model.start_chat(history=[])
 
 #print(convo.last.text)
 #while True:
-  with st.form('my_form'):
-    msg=st.text_area("Enter question:")
-    submitted=st.form_submit_button('Ask')
-    if submitted:
+with st.form('my_form'):
+   msg=st.text_area("Enter question:")
+   submitted=st.form_submit_button('Ask')
+   if submitted:
       if msg=="STOP_CONVO": break
       convo.send_message(msg)
       st.info(convo.last.text)
