@@ -66,5 +66,6 @@ with st.form('my_form'):
         st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
       else:
         convo.send_message(startmessage+text_content)
+        st.info("file successful")
         file_submitted=True
 
