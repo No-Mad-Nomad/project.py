@@ -46,15 +46,13 @@ def read_pdf(content):
   for page in PyPDF2.PdfReader(content).pages:
     text+=page.extract_text()
   return text
-'''
-test
-'''
+
 file_submitted=False
 st.title('PDF-analizotron')
 with st.form('my_form'):
   if file_submitted:
     msg=st.text_area("Enter question:")
-    submitted=st.form_submit_button('Ask')
+    submitted=st.form_submit_button('AAA')
     if submitted:
         convo.send_message(msg)
         st.info(convo.last.text)
