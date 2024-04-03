@@ -46,7 +46,9 @@ def read_pdf(content):
   for page in PyPDF2.PdfReader(content).pages:
     text+=page.extract_text()
   return text
-
+'''
+test
+'''
 file_submitted=False
 st.title('PDF-analizotron')
 with st.form('my_form'):
