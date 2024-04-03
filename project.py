@@ -47,14 +47,15 @@ def read_pdf(content):
     text+=page.extract_text()
   return text
 
-st.title('PDF-analizotron')
+st.title('PDF-analizotron 0.3')
 with st.form('my_form'):
-    file_submitted=False
+    if "file_submitted" not in st.session_state:
+      st.session_state.file_submitted=False
     #submission
     pdffile=st.file_uploader("Upload PDF",type=["pdf"])
     submitted1=st.form_submit_button('Upload')
     if submitted1:
-      if file_submitted:
+      if st.session_state.file_submitted:
         st.info("You already submitted the file")
       else:
         text_content=read_pdf(pdffile)
@@ -69,7 +70,7 @@ with st.form('my_form'):
     msg=st.text_area("Enter question:")
     submitted2=st.form_submit_button('Ask')
     if submitted2:
-        if file_submitted:
+        if st.session_state.file_submitted:
           convo.send_message(msg)
           st.info(convo.last.text)
         else:
