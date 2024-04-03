@@ -36,9 +36,6 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
                               generation_config=generation_config,
                               safety_settings=safety_settings)
 
-#convo = model.start_chat(history=[],prompt=startmessage+text_content)
-convo = model.start_chat(history=[])
-
 startmessage="Hello.\nBelow I will provide you a text.\nAfter that I will ask you some questions about it. Reply with\n \"Text accepted\" if you understood the text and are ready to answer my questions.\n\n"
 
 def read_pdf(content):
@@ -47,8 +44,11 @@ def read_pdf(content):
     text+=page.extract_text()
   return text
 
-st.title('PDF-analizotron 0.31')
+st.title('PDF-analizotron 0.32')
 with st.form('my_form'):
+    #initializing persistent dictionary
+    if "convo" not in st.session_state:
+      st.session_state.convo = model.start_chat(history=[])
     if "file_submitted" not in st.session_state:
       st.session_state.file_submitted=False
     #submission
@@ -63,16 +63,16 @@ with st.form('my_form'):
           #token is about 4 letters or 0.75 words in English, we count it as 5 to count spaces also(roughly)
           st.info("Due to Gemini 1.0 limitations, texts longer than 30 000 tokens cannot be proceeded.")
         else:
-          convo.send_message(startmessage+text_content)
-          st.info(convo.last,text)
+          st.session_state.convo.send_message(startmessage+text_content)
+          st.info(st.session_state.convo.last,text)
           st.session_state.file_submitted=True
     #conversation
     msg=st.text_area("Enter question:")
     submitted2=st.form_submit_button('Ask')
     if submitted2:
         if st.session_state.file_submitted:
-          convo.send_message(msg)
-          st.info(convo.last.text)
+          st.session_state.convo.send_message(msg)
+          st.info(st.session_state.convo.last.text)
         else:
           st.info("Submit the file first")
         
